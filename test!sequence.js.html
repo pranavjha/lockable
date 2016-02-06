@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>test/sequence.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" href="jstree/themes/default-dark/style.min.css">
+  <link rel="stylesheet" href="docco-template.css">
+  
+  <script src="jquery.min.js" type="text/javascript"></script>
+  <script src="jstree/jstree.min.js" type="text/javascript"></script>
+  <script src="tree-builder.js" type="text/javascript"></script>
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <script>
+      var links = [];
+      var hrefs = [];
+      
+        links.push('Gruntfile.js');
+        hrefs.push('Gruntfile.js.html');
+      
+        links.push('README.md');
+        hrefs.push('README.md.html');
+      
+        links.push('lib/lockable.js');
+        hrefs.push('lib!lockable.js.html');
+      
+        links.push('test/acquire.js');
+        hrefs.push('test!acquire.js.html');
+      
+        links.push('test/queue.js');
+        hrefs.push('test!queue.js.html');
+      
+        links.push('test/sequence.js');
+        hrefs.push('test!sequence.js.html');
+      
+    </script>
+    <div id="jump_to">
+      <div class="title">navigator</div>
+      <div id="jump_page">
+        loading...
+      </div>
+    </div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1><span>test</span>/<span>sequence.js</span></h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">var</span> lockable = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../'</span> + (process.env.APP_DIR_FOR_CODE_COVERAGE || <span class="hljs-string">''</span>) + <span class="hljs-string">'lib/lockable'</span>);
+<span class="hljs-keyword">var</span> <span class="hljs-built_in">Promise</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'bluebird'</span>);
+<span class="hljs-keyword">var</span> sinon = <span class="hljs-built_in">require</span>(<span class="hljs-string">'sinon'</span>);
+<span class="hljs-keyword">var</span> chai = <span class="hljs-built_in">require</span>(<span class="hljs-string">'chai'</span>);
+chai.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'sinon-chai'</span>));
+<span class="hljs-keyword">var</span> expect = chai.expect;
+
+describe(<span class="hljs-string">'sequence'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+    it(<span class="hljs-string">'should execute callbacks in sequence even if the promises don\'t get resolved in sequence'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> callbackSpy = sinon.spy();
+        <span class="hljs-keyword">var</span> sequence = lockable.sequence();
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+        <span class="hljs-keyword">return</span> sequence().then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            expect(callbackSpy).to.have.callCount(<span class="hljs-number">3</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">1</span>)).to.be.calledWith(<span class="hljs-number">20</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">2</span>)).to.be.calledWith(<span class="hljs-number">30</span>);
+        });
+    });
+
+    it(<span class="hljs-string">'should execute start and end callbacks only when there is no unresolved promises in the sequence'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> callbackSpy = sinon.spy();
+        <span class="hljs-keyword">var</span> startCb = sinon.spy();
+        <span class="hljs-keyword">var</span> endCb = sinon.spy();
+        <span class="hljs-keyword">var</span> sequence = lockable.sequence(<span class="hljs-string">'A'</span>, startCb, endCb);
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+        }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> sequence();
+        }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            expect(callbackSpy).to.have.callCount(<span class="hljs-number">6</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">1</span>)).to.be.calledWith(<span class="hljs-number">20</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">2</span>)).to.be.calledWith(<span class="hljs-number">30</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">3</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">4</span>)).to.be.calledWith(<span class="hljs-number">20</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">5</span>)).to.be.calledWith(<span class="hljs-number">30</span>);
+
+            expect(startCb).to.have.callCount(<span class="hljs-number">2</span>);
+            expect(endCb).to.have.callCount(<span class="hljs-number">2</span>);
+            expect(startCb.getCall(<span class="hljs-number">0</span>)).to.be.calledBefore(endCb.getCall(<span class="hljs-number">0</span>));
+            expect(endCb.getCall(<span class="hljs-number">0</span>)).to.be.calledBefore(startCb.getCall(<span class="hljs-number">1</span>));
+            expect(startCb.getCall(<span class="hljs-number">1</span>)).to.be.calledBefore(endCb.getCall(<span class="hljs-number">1</span>));
+        });
+    });
+
+    it(<span class="hljs-string">'should not execute the next callback if the previous promise got rejected'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> callbackSpy = sinon.spy();
+        <span class="hljs-keyword">var</span> rejectionSpy = sinon.spy();
+        <span class="hljs-keyword">var</span> startCb = sinon.spy();
+        <span class="hljs-keyword">var</span> endCb = sinon.spy();
+        <span class="hljs-keyword">var</span> sequence = lockable.sequence(<span class="hljs-string">'A'</span>, startCb, endCb);
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+            sequence(<span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'rejected'</span>))).then(callbackSpy.bind({}, <span class="hljs-number">20</span>)).catch(
+                rejectionSpy.bind({})
+            );
+            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>)).catch(
+                rejectionSpy.bind({})
+            );
+        }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>);
+        }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            expect(callbackSpy).to.have.callCount(<span class="hljs-number">4</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">1</span>)).to.be.calledWith(<span class="hljs-number">20</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">2</span>)).to.be.calledWith(<span class="hljs-number">30</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">3</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
+
+            expect(rejectionSpy).to.have.callCount(<span class="hljs-number">2</span>);
+            expect(rejectionSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'rejected'</span>));
+            expect(rejectionSpy.getCall(<span class="hljs-number">1</span>)).to.be.calledWith(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'rejected'</span>));
+
+            expect(startCb).to.have.callCount(<span class="hljs-number">2</span>);
+            expect(endCb).to.have.callCount(<span class="hljs-number">2</span>);
+            expect(startCb.getCall(<span class="hljs-number">0</span>)).to.be.calledBefore(endCb.getCall(<span class="hljs-number">0</span>));
+            expect(endCb.getCall(<span class="hljs-number">0</span>)).to.be.calledBefore(startCb.getCall(<span class="hljs-number">1</span>));
+            expect(startCb.getCall(<span class="hljs-number">1</span>)).to.be.calledBefore(endCb.getCall(<span class="hljs-number">1</span>));
+        });
+    });
+
+    it(<span class="hljs-string">'should not execute the next callback if the sequence lock is re-acquired'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> callbackSpy = sinon.spy();
+        <span class="hljs-keyword">var</span> rejectionSpy = sinon.spy();
+        <span class="hljs-keyword">var</span> sequence = lockable.sequence(<span class="hljs-string">'a.b.c'</span>);
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">60</span>).then(lockable.acquire.bind(lockable, <span class="hljs-string">'a.b'</span>));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>)).catch(rejectionSpy.bind({}));
+        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">90</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>)).catch(rejectionSpy.bind({}));
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">130</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            expect(callbackSpy).to.have.callCount(<span class="hljs-number">1</span>);
+            expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
+            expect(rejectionSpy).to.have.callCount(<span class="hljs-number">2</span>);
+            expect(rejectionSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'concurrency failure'</span>));
+            expect(rejectionSpy.getCall(<span class="hljs-number">1</span>)).to.be.calledWith(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'concurrency failure'</span>));
+        });
+    });
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
