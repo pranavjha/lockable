@@ -111,7 +111,7 @@ module.exports = function(grunt) {
                     // GH_TOKEN is the environment variable holding the access token for the repository
                     repo: 'https://' + process.env.GH_TOKEN + '@github.com/' + process.env.TRAVIS_REPO_SLUG + '.git',
                     clone: '.gh_pages',
-                    message: 'build # ' + process.env.TRAVIS_BUILD_NUMBER + ': <%= grunt.template.today("yyyy-mm-dd") %>',
+                    message: 'build # ' + process.env.TRAVIS_BUILD_NUMBER + 'travis commit',
                     // This configuration will suppress logging and sanitize error messages.
                     silent: true,
                     user: {
