@@ -1,0 +1,30 @@
+{
+    "name": "lockable",
+    "version": "0.0.0",
+    "description": "Synchronous execution of promises",
+    "main": "lib/lockable.js",
+    "scripts": {
+        "test": "grunt test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pranavjha/lockable"
+    },
+    "keywords": [
+        "locks",
+        "concurrency",
+        "cocurrent",
+        "promises",
+        "async",
+        "asynchronous",
+        "q",
+        "queue",
+        "sequence"
+    ],
+    "author": "Pranav Shekhar Jha <jha.pranav.s@gmail.com> (http://github.com/pranavjha)",
+    "license": "Unlicense",
+    "bugs": {
+        "url": "https://github.com/pranavjha/lockable/issues"
+    },
+    "homepage": "https://github.com/pranavjha/lockable"
+}
