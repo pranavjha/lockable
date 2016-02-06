@@ -10,6 +10,23 @@
         "type": "git",
         "url": "https://github.com/pranavjha/lockable"
     },
+    "dependencies": {
+        "bluebird": "latest"
+    },
+    "devDependencies": {
+        "chai": "^3",
+        "grunt": "^0",
+        "grunt-contrib-clean": "^0",
+        "grunt-contrib-jshint": "^0",
+        "grunt-coveralls": "^1.0.0",
+        "grunt-docco": "^0",
+        "grunt-env": "^0.4.4",
+        "grunt-gh-pages": "^1.0.0",
+        "grunt-istanbul": "^0.6.1",
+        "grunt-mocha-test": "^0",
+        "sinon": "^1.17.3",
+        "sinon-chai": "^2.8.0"
+    },
     "keywords": [
         "locks",
         "concurrency",
