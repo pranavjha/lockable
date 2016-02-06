@@ -30,7 +30,7 @@ var jshintOptions = {
 module.exports = function(grunt) {
     // loading the npm task
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-docco');
+    grunt.loadNpmTasks('grunt-docco-plus');
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -99,8 +99,8 @@ module.exports = function(grunt) {
                     src: [
                         'lib/**',
                         'test/**',
-                        "*.js",
-                        'README.md'
+                        '*.js',
+                        '*.md'
                     ],
                     options: {
                         output: '.docs/'
@@ -146,6 +146,6 @@ module.exports = function(grunt) {
         'coveralls:lcov'
     ]);
     grunt.registerTask('document', [
-        'docco'
+        'docco-plus'
     ]);
 };
