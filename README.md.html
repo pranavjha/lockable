@@ -1,78 +1,87 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-  <title>README.md</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" href="jstree/themes/default-dark/style.min.css">
-  <link rel="stylesheet" href="docco-template.css">
-  
-  <script src="jquery.min.js" type="text/javascript"></script>
-  <script src="jstree/jstree.min.js" type="text/javascript"></script>
-  <script src="tree-builder.js" type="text/javascript"></script>
-</head>
-<body>
-  <div id="container">
-    <div id="background"></div>
+    <title>lockable</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+        content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
     
-    <script>
-      var links = [];
-      var hrefs = [];
-      
-        links.push('Gruntfile.js');
-        hrefs.push('Gruntfile.js.html');
-      
-        links.push('README.md');
-        hrefs.push('README.md.html');
-      
-        links.push('lib/lockable.js');
-        hrefs.push('lib!lockable.js.html');
-      
-        links.push('test/acquire.js');
-        hrefs.push('test!acquire.js.html');
-      
-        links.push('test/queue.js');
-        hrefs.push('test!queue.js.html');
-      
-        links.push('test/sequence.js');
-        hrefs.push('test!sequence.js.html');
-      
+    <link rel="stylesheet"
+        media="all"
+        href="assets/file_1.css"/>
+    
+    <link rel="stylesheet"
+        media="all"
+        href="assets/file_5.css"/>
+    
+    <link rel="stylesheet"
+        media="all"
+        href="assets/32px.png"/>
+    
+    <link rel="stylesheet"
+        media="all"
+        href="assets/40px.png"/>
+    
+    <link rel="stylesheet"
+        media="all"
+        href="assets/throbber.gif"/>
+    
+    <link rel="stylesheet"
+        media="all"
+        href="assets/file_7.css"/>
+    
+    <link rel="stylesheet"
+        media="all"
+        href="assets/file_8.css"/>
+    
+
+    
+    <script src="assets/file_2.js"
+        type="text/javascript"></script>
+    
+    <script src="assets/file_3.js"
+        type="text/javascript"></script>
+    
+    <script src="assets/file_4.js"
+        type="text/javascript"></script>
+    
+    <script src="assets/file_6.js"
+        type="text/javascript"></script>
+    
+
+    <script type="application/json" id="jsTreeJSON">
+        [{"id":"lib","text":"lib","icon":"jstree-folder","parent":"#","a_attr":{"href":"lib"},"state":{"opened":false}},{"id":"lib/lockable.js","text":"lockable.js","icon":"jstree-file","parent":"lib","a_attr":{"href":"lib/lockable.js.html"},"state":{"selected":false}},{"id":"test","text":"test","icon":"jstree-folder","parent":"#","a_attr":{"href":"test"},"state":{"opened":false}},{"id":"test/acquire.js","text":"acquire.js","icon":"jstree-file","parent":"test","a_attr":{"href":"test/acquire.js.html"},"state":{"selected":false}},{"id":"test/queue.js","text":"queue.js","icon":"jstree-file","parent":"test","a_attr":{"href":"test/queue.js.html"},"state":{"selected":false}},{"id":"test/sequence.js","text":"sequence.js","icon":"jstree-file","parent":"test","a_attr":{"href":"test/sequence.js.html"},"state":{"selected":false}},{"id":"Gruntfile.js","text":"Gruntfile.js","icon":"jstree-file","parent":"#","a_attr":{"href":"Gruntfile.js.html"},"state":{"selected":false}},{"id":"README.md","text":"README.md","icon":"jstree-file","parent":"#","a_attr":{"href":"README.md.html"},"state":{"selected":true}}]
     </script>
-    <div id="jump_to">
-      <div class="title">navigator</div>
-      <div id="jump_page">
-        loading...
-      </div>
-    </div>
-    
-    <ul class="sections">
-        
-          <li id="title">
-              <div class="annotation">
-                  <h1><span>README.md</span></h1>
-              </div>
-          </li>
-        
+</head>
+<body class="markdown-body">
+<h1>
+    lockable
+</h1>
+<div class="subHeading">
+    README.md
+</div>
+<button type="button" class="navigatorToggle">&#9776; files...</button>
+<nav class="navigationTree minimized">
+    <input type="text" id="jsTreeSearch" placeholder="search..."/>
+    <div></div>
+</nav>
+<section>
+    <ul class="sectionDetails docsOnly">
         
         
         <li id="section-1">
             <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
-              </div>
-              <p><a href="https://travis-ci.org/pranavjha/lockable"><img src="https://travis-ci.org/pranavjha/lockable.svg" alt="Build Status"></a>
+                <p><a href="https://travis-ci.org/pranavjha/lockable"><img src="https://travis-ci.org/pranavjha/lockable.svg" alt="Build Status"></a>
 <a href="https://codeclimate.com/github/pranavjha/lockable"><img src="https://codeclimate.com/github/pranavjha/lockable/badges/gpa.svg" alt="Code Climate"></a>
 <a href="https://coveralls.io/r/pranavjha/lockable"><img src="http://img.shields.io/coveralls/pranavjha/lockable.svg" alt="Coverage Status"></a>
 <a href="http://pranavjha.github.io/lockable/"><img src="https://img.shields.io/badge/documentation-plus-green.svg?style=flat" alt="Documentation"></a></p>
 <p><a href="https://david-dm.org/pranavjha/lockable"><img src="https://david-dm.org/pranavjha/lockable.svg" alt="Dependency Status"></a>
 <a href="https://david-dm.org/pranavjha/lockable#info=devDependencies"><img src="https://david-dm.org/pranavjha/lockable/dev-status.svg" alt="devDependency Status"></a>
 <a href="https://david-dm.org/pranavjha/lockable#info=peerDependencies"><img src="https://david-dm.org/pranavjha/lockable/peer-status.svg" alt="peerDependency Status"></a></p>
-<h1 id="lockable">lockable</h1>
+
 <blockquote>
 <p>Lockable is a utility module for promises to control their execution and their resolution sequence. It exposes methods
-that can be used to control the execution order of promises</p>
+ that can be used to control the execution order of promises</p>
 </blockquote>
 <h2 id="usage">Usage</h2>
 <pre><code class="lang-javascript"><span class="hljs-comment">// load the lockable library</span>
@@ -115,7 +124,7 @@ key2() <span class="hljs-comment">// returns false</span>
 key3() <span class="hljs-comment">// returns true</span>
 key4() <span class="hljs-comment">// returns true</span>
 </code></pre>
-<p>For more examples on <code>acquire</code> refer the <a href="./test/acquire.js">test cases</a></p>
+<p>For more examples on <code>acquire</code> refer the <a href="./test/acquire.js.html">test cases</a></p>
 <h2 id="-sequence-keychain-startcb-endcb-"><code>sequence(keyChain, startCb, endCb)</code></h2>
 <p>Sequence is used to <em>sequencify</em> the resolution of promises. Promises added in a sequence will be resolved in the same
 sequence in which they are added, irrespective of the execution time. Even though the actual promise will be executed
@@ -129,15 +138,15 @@ instantaneously, the callback will wait for the previous promises to resolve. Th
 <span class="hljs-keyword">var</span> promise3 = <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>);
 
 sequence(promise1).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
 });
 
 sequence(promise2).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-built_in">console</span>.log(<span class="hljs-number">2</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">2</span>);
 });
 
 sequence(promise3).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-built_in">console</span>.log(<span class="hljs-number">3</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">3</span>);
 });
 
 <span class="hljs-comment">// Output:</span>
@@ -145,7 +154,7 @@ sequence(promise3).then(<span class="hljs-function"><span class="hljs-keyword">f
 <span class="hljs-comment">// 2 (after 60 ms form start)</span>
 <span class="hljs-comment">// 3 (after 60 ms form start)</span>
 </code></pre>
-<p>For more examples on <code>sequence</code> refer the <a href="./test/sequence.js">test cases</a></p>
+<p>For more examples on <code>sequence</code> refer the <a href="./test/sequence.js.html">test cases</a></p>
 <h2 id="-queue-keychain-startcb-endcb-"><code>queue(keyChain, startCb, endCb)</code></h2>
 <p>A queue delays the execution of functions till the return value of previous execution is resolved. This is different
 from a sequence where, the actual promises are invoked immediately and only the resolution is delayed.</p>
@@ -155,19 +164,19 @@ autosave in a UI form)</p>
 <pre><code class="lang-javascript">
 <span class="hljs-keyword">var</span> queue = lockable.queue();
 queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>);
 }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
 });
 queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>);
 }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
 });
 queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>);
 }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
 });
 
 <span class="hljs-comment">// Output:</span>
@@ -175,13 +184,14 @@ queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<sp
 <span class="hljs-comment">// 2 (after 70 ms form start)</span>
 <span class="hljs-comment">// 3 (after 100 ms form start)</span>
 </code></pre>
-<p>For more examples on <code>queue</code> refer the <a href="./test/queue.js">test cases</a></p>
+<p>For more examples on <code>queue</code> refer the <a href="./test/queue.js.html">test cases</a></p>
 
+            </div><div class="content">
+                
             </div>
-            
         </li>
         
     </ul>
-  </div>
+</section>
 </body>
 </html>
