@@ -19,7 +19,7 @@
         "grunt-contrib-clean": "^0",
         "grunt-contrib-jshint": "^0",
         "grunt-coveralls": "^1.0.0",
-        "grunt-docco-plus": "^1",
+        "grunt-docco-plus": "^2.0.0",
         "grunt-env": "^0.4.4",
         "grunt-gh-pages": "^1.0.0",
         "grunt-istanbul": "^0.6.1",
@@ -43,5 +43,5 @@
     "bugs": {
         "url": "https://github.com/pranavjha/lockable/issues"
     },
-    "homepage": "https://github.com/pranavjha/lockable"
+    "homepage": "https://pranavjha.github.io/lockable"
 }
