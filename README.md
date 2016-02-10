@@ -1,12 +1,14 @@
-[![Build Status](https://travis-ci.org/pranavjha/lockable.svg)](https://travis-ci.org/pranavjha/lockable)
-[![Code Climate](https://codeclimate.com/github/pranavjha/lockable/badges/gpa.svg)](https://codeclimate.com/github/pranavjha/lockable)
-[![Coverage Status](http://img.shields.io/coveralls/pranavjha/lockable.svg)](https://coveralls.io/r/pranavjha/lockable)
-[![Documentation](https://img.shields.io/badge/documentation-plus-green.svg?style=flat)](http://pranavjha.github.io/lockable/)
+[![Build Status](https://img.shields.io/travis/pranavjha/lockable.svg?style=flat-square)](https://travis-ci.org/pranavjha/lockable)
+[![Code Climate](https://img.shields.io/codeclimate/github/pranavjha/lockable.svg?style=flat-square)](https://codeclimate.com/github/pranavjha/lockable)
+[![Coverage Status](http://img.shields.io/coveralls/pranavjha/lockable.svg?style=flat-square)](https://coveralls.io/r/pranavjha/lockable)
+[![Documentation](https://img.shields.io/badge/documentation-plus-green.svg?style=flat-square)](http://pranavjha.github.io/lockable/)
 
+[![Dependency Status](https://img.shields.io/david/pranavjha/lockable.svg?style=flat-square)](https://david-dm.org/pranavjha/lockable)
+[![devDependency Status](https://img.shields.io/david/dev/pranavjha/lockable.svg?style=flat-square)](https://david-dm.org/pranavjha/lockable#info=devDependencies)
+[![peerDependency Status](https://img.shields.io/david/peer/pranavjha/lockable.svg?style=flat-square)](https://david-dm.org/pranavjha/lockable#info=peerDependencies)
 
-[![Dependency Status](https://david-dm.org/pranavjha/lockable.svg)](https://david-dm.org/pranavjha/lockable)
-[![devDependency Status](https://david-dm.org/pranavjha/lockable/dev-status.svg)](https://david-dm.org/pranavjha/lockable#info=devDependencies)
-[![peerDependency Status](https://david-dm.org/pranavjha/lockable/peer-status.svg)](https://david-dm.org/pranavjha/lockable#info=peerDependencies)
+[![NPM](https://nodei.co/npm/lockable.png)](https://nodei.co/npm/lockable/)
+[![NPM](https://nodei.co/npm-dl/lockable.png?months=9&height=1)](https://nodei.co/npm/lockable/)
 
 
 # lockable
