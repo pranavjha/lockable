@@ -1,6 +1,6 @@
 {
     "name": "lockable",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "utility module for promises to control their execution and their resolution sequence",
     "main": "lib/lockable.js",
     "scripts": {
