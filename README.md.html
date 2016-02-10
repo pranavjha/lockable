@@ -64,12 +64,118 @@
               </div>
               <p><a href="https://travis-ci.org/pranavjha/lockable"><img src="https://travis-ci.org/pranavjha/lockable.svg" alt="Build Status"></a>
 <a href="https://codeclimate.com/github/pranavjha/lockable"><img src="https://codeclimate.com/github/pranavjha/lockable/badges/gpa.svg" alt="Code Climate"></a>
-<a href="https://coveralls.io/r/pranavjha/lockable"><img src="http://img.shields.io/coveralls/pranavjha/lockable.svg" alt="Coverage Status"></a></p>
+<a href="https://coveralls.io/r/pranavjha/lockable"><img src="http://img.shields.io/coveralls/pranavjha/lockable.svg" alt="Coverage Status"></a>
+<a href="http://pranavjha.github.io/lockable/"><img src="https://img.shields.io/badge/documentation-plus-green.svg?style=flat" alt="Documentation"></a></p>
 <p><a href="https://david-dm.org/pranavjha/lockable"><img src="https://david-dm.org/pranavjha/lockable.svg" alt="Dependency Status"></a>
 <a href="https://david-dm.org/pranavjha/lockable#info=devDependencies"><img src="https://david-dm.org/pranavjha/lockable/dev-status.svg" alt="devDependency Status"></a>
 <a href="https://david-dm.org/pranavjha/lockable#info=peerDependencies"><img src="https://david-dm.org/pranavjha/lockable/peer-status.svg" alt="peerDependency Status"></a></p>
 <h1 id="lockable">lockable</h1>
-<p>Lockable is a utility module for promises to control their execution and their resolution sequence</p>
+<blockquote>
+<p>Lockable is a utility module for promises to control their execution and their resolution sequence. It exposes methods
+that can be used to control the execution order of promises</p>
+</blockquote>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-javascript"><span class="hljs-comment">// load the lockable library</span>
+
+<span class="hljs-keyword">var</span> lockable = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lockable'</span>);
+
+<span class="hljs-keyword">var</span> keyChain = lockable.acquire(<span class="hljs-string">'key1.key2'</span>);
+</code></pre>
+<h2 id="public-functions">Public functions</h2>
+<p>Lockable exposes the below methods that can be used on promises.</p>
+<h2 id="-acquire-keychain-"><code>acquire(keyChain)</code></h2>
+<p>Acquire function is used to acquire a lock on a keychain</p>
+<p>A keychain is represents a lock and is a <code>.</code> separated string. A keychain string <code>&#39;A.B.C&#39;</code> will represent a hierarchy
+with parents <code>&#39;A&#39;</code> and <code>&#39;A.B&#39;&#39;</code>.</p>
+<p>Acquiring a lock on any parent keychain will invalidate all the child keychain locks. This is detailed in the below
+examples:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> lockable = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lockable'</span>);
+
+<span class="hljs-keyword">var</span> key1 = lockable.acquire(<span class="hljs-string">'A.B'</span>);
+
+key1() <span class="hljs-comment">// returns true here</span>
+
+<span class="hljs-keyword">var</span> key2 = lockable.acquire(<span class="hljs-string">'A.B'</span>);
+
+key1() <span class="hljs-comment">// returns false</span>
+key2() <span class="hljs-comment">// returns true</span>
+
+
+<span class="hljs-keyword">var</span> key3 = lockable.acquire(<span class="hljs-string">'A'</span>);
+
+key1() <span class="hljs-comment">// returns false</span>
+key2() <span class="hljs-comment">// returns false</span>
+key3() <span class="hljs-comment">// returns true</span>
+
+
+<span class="hljs-keyword">var</span> key4 = lockable.acquire(<span class="hljs-string">'A.B'</span>);
+
+key1() <span class="hljs-comment">// returns false</span>
+key2() <span class="hljs-comment">// returns false</span>
+key3() <span class="hljs-comment">// returns true</span>
+key4() <span class="hljs-comment">// returns true</span>
+</code></pre>
+<p>For more examples on <code>acquire</code> refer the <a href="./test/acquire.js">test cases</a></p>
+<h2 id="-sequence-keychain-startcb-endcb-"><code>sequence(keyChain, startCb, endCb)</code></h2>
+<p>Sequence is used to <em>sequencify</em> the resolution of promises. Promises added in a sequence will be resolved in the same
+sequence in which they are added, irrespective of the execution time. Even though the actual promise will be executed
+instantaneously, the callback will wait for the previous promises to resolve. This is illustrated in the below examples</p>
+<p>A sequence can be used if multiple calls update the same object/DOM and only the latest update is relevant.</p>
+<p>This is detailed in the below examples:</p>
+<pre><code class="lang-javascript">
+<span class="hljs-keyword">var</span> sequence = lockable.sequence();
+<span class="hljs-keyword">var</span> promise1 = <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>);
+<span class="hljs-keyword">var</span> promise2 = <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">60</span>);
+<span class="hljs-keyword">var</span> promise3 = <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>);
+
+sequence(promise1).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+
+sequence(promise2).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-number">2</span>);
+});
+
+sequence(promise3).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-number">3</span>);
+});
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// 1 (after 50 ms from start)</span>
+<span class="hljs-comment">// 2 (after 60 ms form start)</span>
+<span class="hljs-comment">// 3 (after 60 ms form start)</span>
+</code></pre>
+<p>For more examples on <code>sequence</code> refer the <a href="./test/sequence.js">test cases</a></p>
+<h2 id="-queue-keychain-startcb-endcb-"><code>queue(keyChain, startCb, endCb)</code></h2>
+<p>A queue delays the execution of functions till the return value of previous execution is resolved. This is different
+from a sequence where, the actual promises are invoked immediately and only the resolution is delayed.</p>
+<p>A queue can be used when multiple executions have to happen only one after the other (eg, updating the same records or
+autosave in a UI form)</p>
+<p>This is detailed in the below examples:</p>
+<pre><code class="lang-javascript">
+<span class="hljs-keyword">var</span> queue = lockable.queue();
+queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>);
+}).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>);
+}).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>);
+}).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// 1 (after 50 ms from start)</span>
+<span class="hljs-comment">// 2 (after 70 ms form start)</span>
+<span class="hljs-comment">// 3 (after 100 ms form start)</span>
+</code></pre>
+<p>For more examples on <code>queue</code> refer the <a href="./test/queue.js">test cases</a></p>
 
             </div>
             

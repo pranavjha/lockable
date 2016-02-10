@@ -100,10 +100,28 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>obtains lock for a specific action, This function takes a sequencial list of keys to obtain a lock on. If any of
-the keys specified is locked again, this lock will get invalidated.</p>
-<p>The function returns a KeyChain Object with an unlock method. This method will return true if the lock is still
-valid.</p>
+              <p>Acquire function is used to acquire a lock on a keychain</p>
+<p>A keychain is represents a lock and is a <code>.</code> separated string. A keychain string <code>&#39;A.B.C&#39;</code> will represent a
+hierarchy with parents <code>&#39;A&#39;</code> and <code>&#39;A.B&#39;&#39;</code>.</p>
+<p>Acquiring a lock on any parent keychain will invalidate all the child keychain locks. This is detailed in the
+below examples:</p>
+<pre><code><span class="hljs-string">``</span><span class="hljs-string">`javascript</span>
+</code></pre><p>var lockable = require(‘lockable’);</p>
+<p>var key1 = lockable.acquire(‘A.B’);</p>
+<p>key1() //  returns true here</p>
+<p>var key2 = lockable.acquire(‘A.B’);</p>
+<p>key1() //  returns false
+key2() //  returns true</p>
+<p>var key3 = lockable.acquire(‘A’);</p>
+<p>key1() //  returns false
+key2() //  returns false
+key3() //  returns true</p>
+<p>var key4 = lockable.acquire(‘A.B’);</p>
+<p>key1() //  returns false
+key2() //  returns false
+key3() //  returns true
+key4() //  returns true
+```</p>
 
             </div>
             
@@ -132,9 +150,44 @@ valid.</p>
             }
             <span class="hljs-keyword">return</span> (thisLock.concurrency === concurrency);
         };
-    },
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Sequence is used to <em>sequencify</em> the resolution of promises. Promises added in a sequence will be resolved in the
+same sequence in which they are added, irrespective of the execution time. Even though the actual promise will be
+executed instantaneously, the callback will wait for the previous promises to resolve. This is illustrated in the
+below examples</p>
+<pre><code><span class="hljs-string">``</span><span class="hljs-string">`javascript</span>
+</code></pre><p>var sequence = lockable.sequence();
+var promise1 = Promise.delay(50);
+var promise2 = Promise.delay(60);
+var promise3 = Promise.delay(30);</p>
+<p>sequence(promise1).then(function() {
+    console.log(1);
+});</p>
+<p>sequence(promise2).then(function() {
+    console.log(2);
+});</p>
+<p>sequence(promise3).then(function() {
+    console.log(3);
+});</p>
+<p>// Output:
+// 1 (after 50 ms from start)
+// 2 (after 60 ms form start)
+// 3 (after 60 ms form start)</p>
+<p>```</p>
 
-    sequence: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sequenceId, startCb, endCb</span>) </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    sequence: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sequenceId, startCb, endCb</span>) </span>{
         <span class="hljs-keyword">if</span> (!sequenceId) {
             sequenceId = <span class="hljs-string">'sequence_'</span> + idGen;
             idGen = idGen + <span class="hljs-number">1</span>;
@@ -148,11 +201,11 @@ valid.</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>when the sequence starts, we call the start callback</p>
 
@@ -169,11 +222,11 @@ valid.</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>when nothing new got added in the sequence, we end the sequence</p>
 
@@ -186,11 +239,11 @@ valid.</p>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>clear off the queue</p>
 
@@ -211,8 +264,49 @@ valid.</p>
                 <span class="hljs-keyword">throw</span> err;
             });
         };
-    },
-    queue: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sequenceId, startCb, endCb</span>) </span>{
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>A queue delays the execution of functions till the return value of previous execution is resolved. This is
+different from a sequence where, the actual promises are invoked immediately and only the resolution is delayed.</p>
+<p>A queue can be used when multiple executions have to happen only one after the other (eg, updating the same
+records or autosave in a UI form)</p>
+<p>This is detailed in the below examples:</p>
+<pre><code class="lang-javascript">
+<span class="hljs-keyword">var</span> queue = lockable.queue();
+queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>);
+}).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>);
+}).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+queue(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>);
+}).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+});
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// 1 (after 50 ms from start)</span>
+<span class="hljs-comment">// 2 (after 70 ms form start)</span>
+<span class="hljs-comment">// 3 (after 100 ms form start)</span>
+</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    queue: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sequenceId, startCb, endCb</span>) </span>{
         <span class="hljs-keyword">if</span> (!sequenceId) {
             sequenceId = <span class="hljs-string">'sequence_'</span> + idGen;
             idGen = idGen + <span class="hljs-number">1</span>;
@@ -230,11 +324,11 @@ valid.</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>when the sequence starts, we call the start callback</p>
 
@@ -250,11 +344,11 @@ valid.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>when nothing new got added in the sequence, we end the sequence</p>
 
@@ -267,11 +361,11 @@ valid.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>clear off the queue</p>
 
