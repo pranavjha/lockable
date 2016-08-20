@@ -7,9 +7,6 @@
 [![devDependency Status](https://img.shields.io/david/dev/pranavjha/lockable.svg?style=flat-square)](https://david-dm.org/pranavjha/lockable#info=devDependencies)
 [![peerDependency Status](https://img.shields.io/david/peer/pranavjha/lockable.svg?style=flat-square)](https://david-dm.org/pranavjha/lockable#info=peerDependencies)
 
-[![NPM](https://nodei.co/npm/lockable.png)](https://nodei.co/npm/lockable/)
-[![NPM](https://nodei.co/npm-dl/lockable.png?months=9&height=1)](https://nodei.co/npm/lockable/)
-
 
 # lockable
 
