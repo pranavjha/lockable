@@ -75,20 +75,26 @@
             </div><div class="content">
                 <div class="highlight"><pre><span class="hljs-meta">'use strict'</span>;
 <span class="hljs-keyword">var</span> lockable = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../'</span> + (process.env.APP_DIR_FOR_CODE_COVERAGE || <span class="hljs-string">''</span>) + <span class="hljs-string">'lib/lockable'</span>);
-<span class="hljs-keyword">var</span> <span class="hljs-built_in">Promise</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'bluebird'</span>);
 <span class="hljs-keyword">var</span> sinon = <span class="hljs-built_in">require</span>(<span class="hljs-string">'sinon'</span>);
 <span class="hljs-keyword">var</span> chai = <span class="hljs-built_in">require</span>(<span class="hljs-string">'chai'</span>);
 chai.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'sinon-chai'</span>));
 <span class="hljs-keyword">var</span> expect = chai.expect;
+<span class="hljs-keyword">var</span> delayPromise = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ms</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve</span>) </span>{
+        setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            resolve(<span class="hljs-literal">true</span>);
+        }, ms);
+    })
+};
 
 describe(<span class="hljs-string">'sequence'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 
     it(<span class="hljs-string">'should execute callbacks in sequence even if the promises don\'t get resolved in sequence'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
         <span class="hljs-keyword">var</span> callbackSpy = sinon.spy();
         <span class="hljs-keyword">var</span> sequence = lockable.sequence();
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+        sequence(delayPromise(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        sequence(delayPromise(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+        sequence(delayPromise(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
         <span class="hljs-keyword">return</span> sequence().then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
             expect(callbackSpy).to.have.callCount(<span class="hljs-number">3</span>);
             expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
@@ -102,14 +108,14 @@ describe(<span class="hljs-string">'sequence'</span>, <span class="hljs-function
         <span class="hljs-keyword">var</span> startCb = sinon.spy();
         <span class="hljs-keyword">var</span> endCb = sinon.spy();
         <span class="hljs-keyword">var</span> sequence = lockable.sequence(<span class="hljs-string">'A'</span>, startCb, endCb);
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+        sequence(delayPromise(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        sequence(delayPromise(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+        sequence(delayPromise(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
 
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
-            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
-            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+        <span class="hljs-keyword">return</span> delayPromise(<span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            sequence(delayPromise(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+            sequence(delayPromise(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+            sequence(delayPromise(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
         }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
             <span class="hljs-keyword">return</span> sequence();
         }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -135,20 +141,20 @@ describe(<span class="hljs-string">'sequence'</span>, <span class="hljs-function
         <span class="hljs-keyword">var</span> startCb = sinon.spy();
         <span class="hljs-keyword">var</span> endCb = sinon.spy();
         <span class="hljs-keyword">var</span> sequence = lockable.sequence(<span class="hljs-string">'A'</span>, startCb, endCb);
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
+        sequence(delayPromise(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        sequence(delayPromise(<span class="hljs-number">20</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>));
+        sequence(delayPromise(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>));
 
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        <span class="hljs-keyword">return</span> delayPromise(<span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            sequence(delayPromise(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
             sequence(<span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'rejected'</span>))).then(callbackSpy.bind({}, <span class="hljs-number">20</span>)).catch(
                 rejectionSpy.bind({})
             );
-            sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>)).catch(
+            sequence(delayPromise(<span class="hljs-number">30</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>)).catch(
                 rejectionSpy.bind({})
             );
         }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>);
+            <span class="hljs-keyword">return</span> delayPromise(<span class="hljs-number">100</span>);
         }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
             expect(callbackSpy).to.have.callCount(<span class="hljs-number">4</span>);
             expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
@@ -172,11 +178,11 @@ describe(<span class="hljs-string">'sequence'</span>, <span class="hljs-function
         <span class="hljs-keyword">var</span> callbackSpy = sinon.spy();
         <span class="hljs-keyword">var</span> rejectionSpy = sinon.spy();
         <span class="hljs-keyword">var</span> sequence = lockable.sequence(<span class="hljs-string">'a.b.c'</span>);
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
-        <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">60</span>).then(lockable.acquire.bind(lockable, <span class="hljs-string">'a.b'</span>));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">100</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>)).catch(rejectionSpy.bind({}));
-        sequence(<span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">90</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>)).catch(rejectionSpy.bind({}));
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.delay(<span class="hljs-number">130</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        sequence(delayPromise(<span class="hljs-number">50</span>)).then(callbackSpy.bind({}, <span class="hljs-number">50</span>));
+        delayPromise(<span class="hljs-number">60</span>).then(lockable.acquire.bind(lockable, <span class="hljs-string">'a.b'</span>));
+        sequence(delayPromise(<span class="hljs-number">100</span>)).then(callbackSpy.bind({}, <span class="hljs-number">20</span>)).catch(rejectionSpy.bind({}));
+        sequence(delayPromise(<span class="hljs-number">90</span>)).then(callbackSpy.bind({}, <span class="hljs-number">30</span>)).catch(rejectionSpy.bind({}));
+        <span class="hljs-keyword">return</span> delayPromise(<span class="hljs-number">130</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
             expect(callbackSpy).to.have.callCount(<span class="hljs-number">1</span>);
             expect(callbackSpy.getCall(<span class="hljs-number">0</span>)).to.be.calledWith(<span class="hljs-number">50</span>);
             expect(rejectionSpy).to.have.callCount(<span class="hljs-number">2</span>);

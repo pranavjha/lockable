@@ -75,8 +75,7 @@
 <p> utility for promises</p>
 
             </div><div class="content">
-                <div class="highlight"><pre><span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">var</span> <span class="hljs-built_in">Promise</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'bluebird'</span>);</pre></div>
+                <div class="highlight"><pre><span class="hljs-meta">'use strict'</span>;</pre></div>
             </div>
         </li>
         
@@ -230,7 +229,7 @@
                 <div class="highlight"><pre>                    promiseSequence = [];
                 }
             };
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.all(promiseSequence).spread(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">thisValue</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.all(promiseSequence).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">thisValue</span>) </span>{
                 endSequenceIfRequired();
                 <span class="hljs-keyword">if</span> (!keyChain()) {
                     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'concurrency failure'</span>);
