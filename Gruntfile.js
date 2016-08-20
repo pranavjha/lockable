@@ -25,7 +25,10 @@ var jshintOptions = {
     maxcomplexity: 7,
     maxlen: 120,
     nonbsp: true,
-    freeze: true
+    freeze: true,
+    predef: [
+        'Promise'
+    ]
 };
 module.exports = function(grunt) {
     // loading the npm task
